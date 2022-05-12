@@ -16,6 +16,7 @@
 #include <TH1D.h>
 #include <TH2D.h>
 #include <TFile.h>
+#include <TGraph.h>
 #include <TCanvas.h>
 
 using namespace std;
@@ -40,11 +41,19 @@ int main(int argc, char** argv) {
 
     TH1D *h_intervDiffMultiHit1 = (TH1D*) file_in.Get("h_intervDiffMultiHit1");
 
+    TH2D *h_tdcBin_1vs2_1 = (TH2D*)file_in.Get("h_tdcBin_1vs2_1");
+    int b_x1 = h_tdcBin_1vs2_1->GetNbinsX()/2;
+    int b_x2 = h_tdcBin_1vs2_1->GetNbinsX();
+    int b_y1 = 1;
+    int b_y2 = h_tdcBin_1vs2_1->GetNbinsY()/2;
+    
+    int nDoubleHits = h_tdcBin_1vs2_1->Integral(b_x1, b_x2, b_y1, b_y2);
+    
     TH1D *h_n_vfTDC_leadEdge1 = (TH1D*) file_in.Get("h_n_vfTDC_leadEdge1");
 
 
     int bin_1InterDiff = h_intervDiffMultiHit1->FindBin(1); // The bin number, when the iterval difference is 1
-    int nDoubleHits = h_intervDiffMultiHit1->GetBinContent(bin_1InterDiff); // The number of events with double hits, when hits are in sequential intervals
+    //int nDoubleHits = h_intervDiffMultiHit1->GetBinContent(bin_1InterDiff); // The number of events with double hits, when hits are in sequential intervals
 
     int binSingleHits = h_n_vfTDC_leadEdge1->FindBin(1);
     int nSingleHits = h_n_vfTDC_leadEdge1->GetBinContent(binSingleHits);
@@ -119,7 +128,35 @@ int main(int argc, char** argv) {
     c1->Print(Form("Figs/LUT_odd1_%d.pdf", run));
     c1->Print(Form("Figs/LUT_odd1_%d.png", run));
     c1->Print(Form("Figs/LUT_odd1_%d.root", run));
+    
+    h_vftdcbin_odd1->Scale(t_max/h_vftdcbin_odd1->Integral() );
+    h_vftdcbin_odd1->Draw("hist");
+    c1->Print(Form("Figs/binWidths_odd1_%d.pdf", run));
+    c1->Print(Form("Figs/binWidths_odd1_%d.png", run));
+    c1->Print(Form("Figs/binWidths_odd1_%d.root", run));
 
+    
+    
+    TGraph *gr_LUT = new TGraph();
+    gr_LUT->SetMarkerColor(4);
+    gr_LUT->SetMarkerStyle(20);
+    gr_LUT->SetMinimum(0);
+    gr_LUT->SetTitle("; tdc bin; time [ps]");
+    
+    for( int i = 0; i < h_cumulative_odd1->GetNbinsX(); i++ ){
+        
+        double x = i+1;
+        double y = 0.5*( h_cumulative_odd1->GetBinContent(i) + h_cumulative_odd1->GetBinContent(i+1) );
+        y = i==0 ? 0.5*( h_cumulative_odd1->GetBinContent(i+1) ) : y;
+        
+        gr_LUT->SetPoint(i, x, y);       
+    }
+    
+    gr_LUT->Draw("AP");
+    c1->Print(Form("Figs/gr_LUT_odd_%d.pdf", run));
+    c1->Print(Form("Figs/gr_LUT_odd_%d.png", run));
+    c1->Print(Form("Figs/gr_LUT_odd_%d.root", run));
+    
     return 0;
 }
 

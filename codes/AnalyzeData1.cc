@@ -6,6 +6,7 @@
  */
 
 #include <set>
+#include <iomanip>
 #include <cstdlib>
 
 // ===== Root headers =====
@@ -41,7 +42,7 @@ int main(int argc, char** argv) {
     if (argc >= 2) {
         //sprintf(outputFile,"%s",argv[2]);
         run = atoi(argv[1]);
-        sprintf(inputFile, "../Data/vftdc_0%d_All.hipo", run);
+        sprintf(inputFile, "../Decoded/0%d/vftdc_0%d_All.hipo", run, run);
     } else {
         std::cout << " *** please provide the run number..." << std::endl;
         std::cout << "Exiting" << endl;
@@ -115,7 +116,7 @@ int main(int argc, char** argv) {
     hipo::bank bCAENTDC(factory.getSchema("FTOF::tdc"));
     hipo::bank bVFTDC(factory.getSchema("FTOF::vftdc"));
 
-    const int nTestCounts = 250000;
+    const int nTestCounts = 2500000;
 
     try {
 
@@ -124,7 +125,7 @@ int main(int argc, char** argv) {
 
             evCounter = evCounter + 1;
 
-            //if( evCounter >= nTestCounts ){break;}
+            if( evCounter >= nTestCounts ){break;}
 
             //if( evCounter > 5000 ){break;}
             if (evCounter % 10000 == 0) {
@@ -160,8 +161,6 @@ int main(int argc, char** argv) {
                 //cout<<"Sec = "<<sec<<"    layer = "<<layer<<"     component = "<<component<<"    order = "<<order<<"    tdc = "<<tdc<<"    edge = "<<edge<<endl;
                 h_vdTDC_tdcRaw1.Fill(tdc);
 
-
-
                 m_hvfTDC_tdcRaw1[component].Fill(tdc);
 
                 int interval = tdc / nBins;
@@ -195,6 +194,15 @@ int main(int argc, char** argv) {
                 int tdcBin0 = v_leadingedgeHits.at(0).tdcBin;
                 int tdcBin1 = v_leadingedgeHits.at(1).tdcBin;
                 h_intervDiffMultiHit1.Fill(intervalDiff);
+                
+                
+//                if( v_leadingedgeHits.size() >= 3 ){
+//                    cout<<"= = = = = = = = = = = Beginning = = = = = = = = = = = = ="<<endl;
+//                    for( auto curHit : v_leadingedgeHits ){
+//                        cout<<setw(10)<<curHit.rawTDC<<setw(10)<<curHit.interval<<setw(10)<<curHit.tdcBin<<endl;
+//                    }
+//                    cout<<endl;
+//                }
 
                 if (intervalDiff < 2) {
                     h_tdcBin_1vs2_1.Fill(tdcBin0, tdcBin1);

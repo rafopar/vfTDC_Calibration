@@ -7,7 +7,11 @@
 
 #include <cstdlib>
 
+#include <TF1.h>
+#include <TLine.h>
 #include <TFile.h>
+#include <TStyle.h>
+#include <TCanvas.h>
 
 using namespace std;
 
@@ -18,7 +22,7 @@ void DrawPlots1() {
 
     gStyle->SetOptFit(1);
 
-    const int run = 15906;
+    const int run = 15908;
 
     TFile file_in(Form("AnalyzeData1_%d_out.root", run), "Read");
     const int nOpen_Channels = 8;
@@ -247,9 +251,5 @@ void DrawPlots1() {
         c1->Print(Form("Figs/Raw_TDC_Run_%d_Component%d.pdf]", run, curCh));
     }
 
-
-
-
     gDirectory->Write();
 }
-
