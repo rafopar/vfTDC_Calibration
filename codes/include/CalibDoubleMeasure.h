@@ -24,6 +24,10 @@ public:
     TH1D* GetCumulative2();              // The cumulative of the 2nd interval tdc distribution;
     
     double GetTime(int, int);            // Returns the time based on two measurements. First (Second) arguments is the tdc bin in the first (second) interval.
+    double GetT1Time(int);               // Returns the time based only on t1 bin
+    double GetT2Time(int);               // Returns the time based only on t2 bins
+    double GetT1Sigma(int);              // Returns the time based only on t1 bin
+    double GetT2Sigma(int);              // Returns the time based only on t2 bins
     
 private:
 

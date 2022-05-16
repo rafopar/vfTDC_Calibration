@@ -61,7 +61,7 @@ private:
 
 
 class TripleMeasure : public Measurement{
-
+public:
     TripleMeasure( std::vector<tdcHit*> & );
     
     int Get1stInterval();

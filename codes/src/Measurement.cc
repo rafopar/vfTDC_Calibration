@@ -104,3 +104,31 @@ void TripleMeasure::AnalyzeMeasurement() {
 bool vfTDCFuncs::CompareInterval( tdcHit* h1, tdcHit* h2){
   return (h1->interval < h2->interval);
 }
+
+int TripleMeasure::Get1stInterval(){
+    return f1stInterval;
+}
+int TripleMeasure::Get1stTDCBin(){
+    return f1stTDCBin;
+}
+int TripleMeasure::Get1stRawTDC(){
+    return f1stRawTDC;
+}
+int TripleMeasure::Get2ndInterval(){
+    return f2ndInterval;
+}
+int TripleMeasure::Get2ndTDCBin(){
+    return f2ndTDCBin;
+}
+int TripleMeasure::Get2ndRawTDC(){
+    return f2ndRawTDC;
+}
+int TripleMeasure::Get3rdInterval(){
+    return f3rdInterval;
+}
+int TripleMeasure::Get3rdTDCBin(){
+    return f3rdTDCBin;
+}
+int TripleMeasure::Get3rdRawTDC(){
+    return f3rdRawTDC;
+}

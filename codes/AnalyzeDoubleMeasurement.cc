@@ -46,7 +46,8 @@ int main(int argc, char** argv) {
     if (argc >= 2) {
         //sprintf(outputFile,"%s",argv[2]);
         run = atoi(argv[1]);
-        sprintf(inputFile, "../Decoded/0%d/vftdc_0%d_All.hipo", run, run);
+        sprintf(inputFile, "../Decoded/000%d/vftdc_000%d_All.hipo", run, run);
+        //sprintf(inputFile, "../Decoded/0%d/vftdc_0%d_All.hipo", run, run);
     } else {
         std::cout << " *** please provide the run number..." << std::endl;
         std::cout << "Exiting" << endl;
@@ -82,6 +83,16 @@ int main(int argc, char** argv) {
     TH2D h_tdc1_vs_tdc2_DoubleMeasure2("h_tdc1_vs_tdc2_DoubleMeasure2", "", nBins + 1, -0.5, nBins + 0.5, nBins + 1, -0.5, nBins + 0.5);
     TH2D h_tdc1_vs_tdc2_DoubleMeasure3("h_tdc1_vs_tdc2_DoubleMeasure3", "", nBins + 1, -0.5, nBins + 0.5, nBins + 1, -0.5, nBins + 0.5);
 
+    TH2D h_tdc1_vs_tdc2_TripleMeasure1("h_tdc1_vs_tdc2_TripleMeasure1", "", nBins + 1, -0.5, nBins + 0.5, nBins + 1, -0.5, nBins + 0.5);
+    TH2D h_tdc1_vs_tdc3_TripleMeasure1("h_tdc1_vs_tdc3_TripleMeasure1", "", nBins + 1, -0.5, nBins + 0.5, nBins + 1, -0.5, nBins + 0.5);
+    TH2D h_tdc2_vs_tdc3_TripleMeasure1("h_tdc2_vs_tdc3_TripleMeasure1", "", nBins + 1, -0.5, nBins + 0.5, nBins + 1, -0.5, nBins + 0.5);
+    TH2D h_tdc1_vs_tdc2_TripleMeasure2("h_tdc1_vs_tdc2_TripleMeasure2", "", nBins + 1, -0.5, nBins + 0.5, nBins + 1, -0.5, nBins + 0.5);
+    TH2D h_tdc1_vs_tdc3_TripleMeasure2("h_tdc1_vs_tdc3_TripleMeasure2", "", nBins + 1, -0.5, nBins + 0.5, nBins + 1, -0.5, nBins + 0.5);
+    TH2D h_tdc2_vs_tdc3_TripleMeasure2("h_tdc2_vs_tdc3_TripleMeasure2", "", nBins + 1, -0.5, nBins + 0.5, nBins + 1, -0.5, nBins + 0.5);
+    TH2D h_tdc1_vs_tdc2_TripleMeasure3("h_tdc1_vs_tdc2_TripleMeasure3", "", nBins + 1, -0.5, nBins + 0.5, nBins + 1, -0.5, nBins + 0.5);
+    TH2D h_tdc1_vs_tdc3_TripleMeasure3("h_tdc1_vs_tdc3_TripleMeasure3", "", nBins + 1, -0.5, nBins + 0.5, nBins + 1, -0.5, nBins + 0.5);
+    TH2D h_tdc2_vs_tdc3_TripleMeasure3("h_tdc2_vs_tdc3_TripleMeasure3", "", nBins + 1, -0.5, nBins + 0.5, nBins + 1, -0.5, nBins + 0.5);
+
     hipo::reader reader;
     reader.open(inputFile);
 
@@ -96,7 +107,7 @@ int main(int argc, char** argv) {
 
     hipo::bank bVFTDC(factory.getSchema("FTOF::vftdc"));
 
-    const int nTestCounts = 25000000;
+    const int nTestCounts = 45000000;
 
     try {
 
@@ -141,7 +152,7 @@ int main(int argc, char** argv) {
                 edge == 0 ? h_vfTDC_tdcRaw_leadingEdge1.Fill(curHit.rawTDC) : h_vfTDC_tdcRaw_trailingEdge1.Fill(curHit.rawTDC);
                 edge == 0 ? m_hvfTDC_tdcRaw_leading1[component].Fill(curHit.rawTDC) : m_hvfTDC_tdcRaw_trailing1[component].Fill(curHit.rawTDC);
 
-
+                
             }
 
             vector< vector<tdcHit*> > v_lead_OrganizedHits;
@@ -156,6 +167,8 @@ int main(int argc, char** argv) {
             //                bVFTDC.show();
             //                cout << "Size of Organized Hits is " << v_lead_OrganizedHits.size() << endl;                
             //            }
+
+
 
 
             for (auto curVec : v_lead_OrganizedHits) {
@@ -176,6 +189,37 @@ int main(int argc, char** argv) {
                     //                    DoubleMeasure doubleMes(curVec);
                     //                    cout<<"--- From the class "<<doubleMes.Get1stInterval()<<"     "<<doubleMes.Get2ndInterval()<<endl;
 
+                } else if (curVec.size() == 3) {
+
+                    TripleMeasure triMes(curVec);
+
+                    h_tdc1_vs_tdc2_TripleMeasure1.Fill(triMes.Get1stTDCBin(), triMes.Get2ndTDCBin());
+                    h_tdc1_vs_tdc3_TripleMeasure1.Fill(triMes.Get1stTDCBin(), triMes.Get3rdTDCBin());
+                    h_tdc2_vs_tdc3_TripleMeasure1.Fill(triMes.Get2ndTDCBin(), triMes.Get3rdTDCBin());
+                    
+                    if( triMes.Get1stInterval() % 2 == 0 ) {
+                        h_tdc1_vs_tdc2_TripleMeasure2.Fill(triMes.Get1stTDCBin(), triMes.Get2ndTDCBin());
+                        h_tdc1_vs_tdc3_TripleMeasure2.Fill(triMes.Get1stTDCBin(), triMes.Get3rdTDCBin());
+                        h_tdc2_vs_tdc3_TripleMeasure2.Fill(triMes.Get2ndTDCBin(), triMes.Get3rdTDCBin());
+                    }else{
+                        h_tdc1_vs_tdc2_TripleMeasure3.Fill(triMes.Get1stTDCBin(), triMes.Get2ndTDCBin());
+                        h_tdc1_vs_tdc3_TripleMeasure3.Fill(triMes.Get1stTDCBin(), triMes.Get3rdTDCBin());
+                        h_tdc2_vs_tdc3_TripleMeasure3.Fill(triMes.Get2ndTDCBin(), triMes.Get3rdTDCBin());
+                    }
+
+                } else {
+//                    cout << "_____This should not happen_____" << endl;
+//                    cout << "The vector size is " << curVec.size() << endl;
+//                    cout << " *********** All Leading edge hits ************* " << endl;
+//
+//                    for (int i = 0; i < v_leadingedgeHits.size(); i++) {
+//                        cout << v_leadingedgeHits.at(i).interval << "     ";
+//                    }
+//                    cout << endl;
+
+
+                    //                    cout<<"Exiting..."<<endl;
+                    //                    exit(1);
                 }
 
             }

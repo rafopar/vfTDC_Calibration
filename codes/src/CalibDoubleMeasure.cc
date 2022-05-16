@@ -72,6 +72,42 @@ double CalibDoubleMeasure::GetTime(int tbin1, int tbin2){
     return ( t1*s2*s2 + t2*s1*s1 )/(s1*s1 + s2*s2);
 }
 
+double CalibDoubleMeasure::GetT1Time(int tbin){
+    if( tbin < 0 || tbin >= f_LUT_1.size() ){
+        std::cout<<" tbin1 is out of range. Exiting"<<std::endl;
+        exit(1);
+    }
+    
+    return f_LUT_1.at(tbin);
+}
+
+double CalibDoubleMeasure::GetT2Time(int tbin){
+    if( tbin < 0 || tbin >= f_LUT_2.size() ){
+        std::cout<<" tbin2 is out of range. Exiting"<<std::endl;
+        exit(1);
+    }
+    
+    return f_LUT_2.at(tbin);
+}
+
+double CalibDoubleMeasure::GetT1Sigma(int tbin){
+    if( tbin < 0 || tbin >= f_LUT_1.size() ){
+        std::cout<<" tbin1 is out of range. Exiting"<<std::endl;
+        exit(1);
+    }
+    
+    return f_LUTErr_1.at(tbin);
+}
+
+double CalibDoubleMeasure::GetT2Sigma(int tbin){
+    if( tbin < 0 || tbin >= f_LUT_2.size() ){
+        std::cout<<" tbin2 is out of range. Exiting"<<std::endl;
+        exit(1);
+    }
+    
+    return f_LUTErr_2.at(tbin);
+}
+
 
 CalibDoubleMeasure::CalibDoubleMeasure(const CalibDoubleMeasure& orig) {
 }
