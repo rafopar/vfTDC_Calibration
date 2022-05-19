@@ -107,7 +107,7 @@ int main(int argc, char** argv) {
 
     hipo::bank bVFTDC(factory.getSchema("FTOF::vftdc"));
 
-    const int nTestCounts = 45000000;
+    const int nTestCounts = 250000;
 
     try {
 
@@ -142,7 +142,7 @@ int main(int argc, char** argv) {
                 long int timestamp = bVFTDC.getLong("timestamp", i);
                 int interval = tdc / nBins;
                 int tdcBin = (tdc % nBins);
-
+                
                 tdcHit curHit;
                 curHit.interval = interval;
                 curHit.rawTDC = tdc;
