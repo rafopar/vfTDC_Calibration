@@ -22,6 +22,9 @@ public:
     TH1D* GetTDCbins2(); // Returns the pointer to the tdc distribution in the 2nd interval
     TH1D* GetCumulative1(); // The cumulative of the 1st interval tdc distribution;
     TH1D* GetCumulative2(); // The cumulative of the 2nd interval tdc distribution;
+    
+    void PrintLUT1();       // Prints values of LUT1
+    void PrintLUT2();       // Prints values of LUT2
 
     double GetTime(int, int); // Returns the time based on two measurements. First (Second) arguments is the tdc bin in the first (second) interval.
     double GetT1Time(int); // Returns the time based only on t1 bin

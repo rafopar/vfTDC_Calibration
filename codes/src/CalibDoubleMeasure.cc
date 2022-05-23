@@ -5,6 +5,7 @@
  * Created on May 13, 2022, 4:13 PM
  */
 
+#include <iomanip>
 #include <iostream>
 #include "CalibDoubleMeasure.h"
 
@@ -57,57 +58,56 @@ CalibDoubleMeasure::CalibDoubleMeasure(TH2D *h_12, TH2D *h_13) {
 
 }
 
-double CalibDoubleMeasure::GetTime(int tbin1, int tbin2){
+double CalibDoubleMeasure::GetTime(int tbin1, int tbin2) {
 
-    if( tbin1 < 0 || tbin1 >= f_LUT_1.size() || tbin2 < 0 || tbin2 >= f_LUT_2.size() ){
-        std::cout<<"Either tbin1 or tbin2 are out of range. Exiting"<<std::endl;
+    if (tbin1 < 0 || tbin1 >= f_LUT_1.size() || tbin2 < 0 || tbin2 >= f_LUT_2.size()) {
+        std::cout << "Either tbin1 or tbin2 are out of range. Exiting" << std::endl;
         exit(1);
     }
-    
+
     double t1 = f_LUT_1.at(tbin1);
     double s1 = f_LUTErr_1.at(tbin1);
     double t2 = f_LUT_2.at(tbin2);
     double s2 = f_LUTErr_2.at(tbin2);
-    
-    return ( t1*s2*s2 + t2*s1*s1 )/(s1*s1 + s2*s2);
+
+    return ( t1 * s2 * s2 + t2 * s1 * s1) / (s1 * s1 + s2 * s2);
 }
 
-double CalibDoubleMeasure::GetT1Time(int tbin){
-    if( tbin < 0 || tbin >= f_LUT_1.size() ){
-        std::cout<<" tbin1 is out of range. Exiting"<<std::endl;
+double CalibDoubleMeasure::GetT1Time(int tbin) {
+    if (tbin < 0 || tbin >= f_LUT_1.size()) {
+        std::cout << " tbin1 is out of range. Exiting" << std::endl;
         exit(1);
     }
-    
+
     return f_LUT_1.at(tbin);
 }
 
-double CalibDoubleMeasure::GetT2Time(int tbin){
-    if( tbin < 0 || tbin >= f_LUT_2.size() ){
-        std::cout<<" tbin2 is out of range. Exiting"<<std::endl;
+double CalibDoubleMeasure::GetT2Time(int tbin) {
+    if (tbin < 0 || tbin >= f_LUT_2.size()) {
+        std::cout << " tbin2 is out of range. Exiting" << std::endl;
         exit(1);
     }
-    
+
     return f_LUT_2.at(tbin);
 }
 
-double CalibDoubleMeasure::GetT1Sigma(int tbin){
-    if( tbin < 0 || tbin >= f_LUT_1.size() ){
-        std::cout<<" tbin1 is out of range. Exiting"<<std::endl;
+double CalibDoubleMeasure::GetT1Sigma(int tbin) {
+    if (tbin < 0 || tbin >= f_LUT_1.size()) {
+        std::cout << " tbin1 is out of range. Exiting" << std::endl;
         exit(1);
     }
-    
+
     return f_LUTErr_1.at(tbin);
 }
 
-double CalibDoubleMeasure::GetT2Sigma(int tbin){
-    if( tbin < 0 || tbin >= f_LUT_2.size() ){
-        std::cout<<" tbin2 is out of range. Exiting"<<std::endl;
+double CalibDoubleMeasure::GetT2Sigma(int tbin) {
+    if (tbin < 0 || tbin >= f_LUT_2.size()) {
+        std::cout << " tbin2 is out of range. Exiting" << std::endl;
         exit(1);
     }
-    
+
     return f_LUTErr_2.at(tbin);
 }
-
 
 CalibDoubleMeasure::CalibDoubleMeasure(const CalibDoubleMeasure& orig) {
 }
@@ -127,6 +127,41 @@ TH1D* CalibDoubleMeasure::GetCumulative1() {
 TH1D* CalibDoubleMeasure::GetCumulative2() {
     return fh_Cumulative_t2;
 }
+
+void CalibDoubleMeasure::PrintLUT1() {
+    std::cout << "===============            LUT1             ================== " << std::endl;
+    std::cout << std::fixed;
+    std::cout << std::setprecision(2);
+    int printsInLine = 0;
+    for (int i = 0; i < f_LUT_1.size(); i++) {
+
+        if (printsInLine >= 5) {
+            std::cout << std::endl;
+            printsInLine = 0;
+        }
+        std::cout << "("<<std::setw(3) << i << "," <<std::setw(8) << f_LUT_1.at(i) << "+/-" <<std::setw(11) << f_LUTErr_1.at(i) << ")";
+        printsInLine = printsInLine + 1;
+    }
+    std::cout << std::endl;
+}
+
+void CalibDoubleMeasure::PrintLUT2() {
+    std::cout << "===============            LUT2             ================== " << std::endl;
+    std::cout << std::fixed;
+    std::cout << std::setprecision(2);
+    int printsInLine = 0;
+    for (int i = 0; i < f_LUT_2.size(); i++) {
+
+        if (printsInLine >= 5) {
+            std::cout << std::endl;
+            printsInLine = 0;
+        }
+        std::cout << "("<<std::setw(3) << i << "," <<std::setw(8) << f_LUT_2.at(i) << "+/-" <<std::setw(11) << f_LUTErr_2.at(i) << ")";
+        printsInLine = printsInLine + 1;
+    }
+    std::cout << std::endl;
+}
+
 
 CalibDoubleMeasure::~CalibDoubleMeasure() {
     delete fh_tdcBin1;

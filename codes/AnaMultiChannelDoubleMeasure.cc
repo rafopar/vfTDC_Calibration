@@ -61,19 +61,32 @@ int main(int argc, char** argv) {
     TFile file_out(Form("Analyze_MultiChannelDoubleMeasure_%d.root", run), "Recreate");
     
     std::map<int, TH2D > mh_tdc1_vs_tdc2_DoubleMeasure1;
+    std::map<int, TH2D > mh_tdc1_vs_tdc2_DoubleMeasure2;
+    std::map<int, TH2D > mh_tdc1_vs_tdc2_DoubleMeasure3;
     std::map<int, TH2D > mh_tdc1_vs_tdc2_TripleMeasure1;
     std::map<int, TH2D > mh_tdc1_vs_tdc3_TripleMeasure1;
     std::map<int, TH2D > mh_tdc2_vs_tdc3_TripleMeasure1;
-    TH2D h_tdc1_vs_tdc2_TripleMeasure1("h_tdc1_vs_tdc2_TripleMeasure1", "", nBins + 1, -0.5, nBins + 0.5, nBins + 1, -0.5, nBins + 0.5);
-    TH2D h_tdc1_vs_tdc3_TripleMeasure1("h_tdc1_vs_tdc3_TripleMeasure1", "", nBins + 1, -0.5, nBins + 0.5, nBins + 1, -0.5, nBins + 0.5);
-    TH2D h_tdc2_vs_tdc3_TripleMeasure1("h_tdc2_vs_tdc3_TripleMeasure1", "", nBins + 1, -0.5, nBins + 0.5, nBins + 1, -0.5, nBins + 0.5);
+    std::map<int, TH2D > mh_tdc1_vs_tdc2_TripleMeasure2;
+    std::map<int, TH2D > mh_tdc1_vs_tdc3_TripleMeasure2;
+    std::map<int, TH2D > mh_tdc2_vs_tdc3_TripleMeasure2;
+    std::map<int, TH2D > mh_tdc1_vs_tdc2_TripleMeasure3;
+    std::map<int, TH2D > mh_tdc1_vs_tdc3_TripleMeasure3;
+    std::map<int, TH2D > mh_tdc2_vs_tdc3_TripleMeasure3;
 
     
     for( int ch : s_activeChannels ){
         mh_tdc1_vs_tdc2_DoubleMeasure1[ch] = TH2D(Form("h_tdc1_vs_tdc2_DoubleMeasure1_%d", ch), "", nBins + 1, -0.5, nBins + 0.5, nBins + 1, -0.5, nBins + 0.5);
+        mh_tdc1_vs_tdc2_DoubleMeasure2[ch] = TH2D(Form("h_tdc1_vs_tdc2_DoubleMeasure2_%d", ch), "", nBins + 1, -0.5, nBins + 0.5, nBins + 1, -0.5, nBins + 0.5);
+        mh_tdc1_vs_tdc2_DoubleMeasure3[ch] = TH2D(Form("h_tdc1_vs_tdc2_DoubleMeasure3_%d", ch), "", nBins + 1, -0.5, nBins + 0.5, nBins + 1, -0.5, nBins + 0.5);
         mh_tdc1_vs_tdc2_TripleMeasure1[ch] = TH2D(Form("h_tdc1_vs_tdc2_TripleMeasure1_%d", ch), "", nBins + 1, -0.5, nBins + 0.5, nBins + 1, -0.5, nBins + 0.5);
         mh_tdc1_vs_tdc3_TripleMeasure1[ch] = TH2D(Form("h_tdc1_vs_tdc3_TripleMeasure1_%d", ch), "", nBins + 1, -0.5, nBins + 0.5, nBins + 1, -0.5, nBins + 0.5);
         mh_tdc2_vs_tdc3_TripleMeasure1[ch] = TH2D(Form("h_tdc2_vs_tdc3_TripleMeasure1_%d", ch), "", nBins + 1, -0.5, nBins + 0.5, nBins + 1, -0.5, nBins + 0.5);
+        mh_tdc1_vs_tdc2_TripleMeasure2[ch] = TH2D(Form("h_tdc1_vs_tdc2_TripleMeasure2_%d", ch), "", nBins + 1, -0.5, nBins + 0.5, nBins + 1, -0.5, nBins + 0.5);
+        mh_tdc1_vs_tdc3_TripleMeasure2[ch] = TH2D(Form("h_tdc1_vs_tdc3_TripleMeasure2_%d", ch), "", nBins + 1, -0.5, nBins + 0.5, nBins + 1, -0.5, nBins + 0.5);
+        mh_tdc2_vs_tdc3_TripleMeasure2[ch] = TH2D(Form("h_tdc2_vs_tdc3_TripleMeasure2_%d", ch), "", nBins + 1, -0.5, nBins + 0.5, nBins + 1, -0.5, nBins + 0.5);
+        mh_tdc1_vs_tdc2_TripleMeasure3[ch] = TH2D(Form("h_tdc1_vs_tdc2_TripleMeasure3_%d", ch), "", nBins + 1, -0.5, nBins + 0.5, nBins + 1, -0.5, nBins + 0.5);
+        mh_tdc1_vs_tdc3_TripleMeasure3[ch] = TH2D(Form("h_tdc1_vs_tdc3_TripleMeasure3_%d", ch), "", nBins + 1, -0.5, nBins + 0.5, nBins + 1, -0.5, nBins + 0.5);
+        mh_tdc2_vs_tdc3_TripleMeasure3[ch] = TH2D(Form("h_tdc2_vs_tdc3_TripleMeasure3_%d", ch), "", nBins + 1, -0.5, nBins + 0.5, nBins + 1, -0.5, nBins + 0.5);
     }
 
     hipo::reader reader;
@@ -160,12 +173,30 @@ int main(int argc, char** argv) {
                     if (curVec.size() == 2) {
                         DoubleMeasure doubleMes(curVec);
                         mh_tdc1_vs_tdc2_DoubleMeasure1[ch].Fill(doubleMes.Get1stTDCBin(), doubleMes.Get2ndTDCBin());
+                        
+                        if( doubleMes.Get1stInterval() %2 == 0 ){
+                            mh_tdc1_vs_tdc2_DoubleMeasure2[ch].Fill(doubleMes.Get1stTDCBin(), doubleMes.Get2ndTDCBin());
+                        }else{
+                            mh_tdc1_vs_tdc2_DoubleMeasure3[ch].Fill(doubleMes.Get1stTDCBin(), doubleMes.Get2ndTDCBin());
+                        }
+                        
+                        
                     }else if (curVec.size() == 3) {
                         TripleMeasure triMes(curVec);
                         
                         mh_tdc1_vs_tdc2_TripleMeasure1[ch].Fill(triMes.Get1stTDCBin(), triMes.Get2ndTDCBin() );
                         mh_tdc1_vs_tdc3_TripleMeasure1[ch].Fill(triMes.Get1stTDCBin(), triMes.Get3rdTDCBin() );
                         mh_tdc2_vs_tdc3_TripleMeasure1[ch].Fill(triMes.Get2ndTDCBin(), triMes.Get3rdTDCBin() );
+                        
+                        if( triMes.Get1stInterval()%2 == 0 ) {
+                            mh_tdc1_vs_tdc2_TripleMeasure2[ch].Fill(triMes.Get1stTDCBin(), triMes.Get2ndTDCBin());
+                            mh_tdc1_vs_tdc3_TripleMeasure2[ch].Fill(triMes.Get1stTDCBin(), triMes.Get3rdTDCBin());
+                            mh_tdc2_vs_tdc3_TripleMeasure2[ch].Fill(triMes.Get2ndTDCBin(), triMes.Get3rdTDCBin());
+                        }else {
+                            mh_tdc1_vs_tdc2_TripleMeasure3[ch].Fill(triMes.Get1stTDCBin(), triMes.Get2ndTDCBin());
+                            mh_tdc1_vs_tdc3_TripleMeasure3[ch].Fill(triMes.Get1stTDCBin(), triMes.Get3rdTDCBin());
+                            mh_tdc2_vs_tdc3_TripleMeasure3[ch].Fill(triMes.Get2ndTDCBin(), triMes.Get3rdTDCBin());
+                        }
                     }
 
                 }
