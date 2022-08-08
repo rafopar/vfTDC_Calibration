@@ -51,7 +51,6 @@ int main(int argc, char** argv) {
     
     TH1D *h_n_vfTDC_leadEdge1 = (TH1D*) file_in.Get("h_n_vfTDC_leadEdge1");
 
-
     int bin_1InterDiff = h_intervDiffMultiHit1->FindBin(1); // The bin number, when the iterval difference is 1
     //int nDoubleHits = h_intervDiffMultiHit1->GetBinContent(bin_1InterDiff); // The number of events with double hits, when hits are in sequential intervals
 

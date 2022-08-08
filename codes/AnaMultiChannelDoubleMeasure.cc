@@ -72,6 +72,7 @@ int main(int argc, char** argv) {
     std::map<int, TH2D > mh_tdc1_vs_tdc2_TripleMeasure3;
     std::map<int, TH2D > mh_tdc1_vs_tdc3_TripleMeasure3;
     std::map<int, TH2D > mh_tdc2_vs_tdc3_TripleMeasure3;
+    std::map<int, TH1D > mh_tdcBin_lead1;  // Just the tdc bin distribution of all leading edge hits, regardless of the interval,.
 
     
     for( int ch : s_activeChannels ){
@@ -87,6 +88,7 @@ int main(int argc, char** argv) {
         mh_tdc1_vs_tdc2_TripleMeasure3[ch] = TH2D(Form("h_tdc1_vs_tdc2_TripleMeasure3_%d", ch), "", nBins + 1, -0.5, nBins + 0.5, nBins + 1, -0.5, nBins + 0.5);
         mh_tdc1_vs_tdc3_TripleMeasure3[ch] = TH2D(Form("h_tdc1_vs_tdc3_TripleMeasure3_%d", ch), "", nBins + 1, -0.5, nBins + 0.5, nBins + 1, -0.5, nBins + 0.5);
         mh_tdc2_vs_tdc3_TripleMeasure3[ch] = TH2D(Form("h_tdc2_vs_tdc3_TripleMeasure3_%d", ch), "", nBins + 1, -0.5, nBins + 0.5, nBins + 1, -0.5, nBins + 0.5);
+        mh_tdcBin_lead1[ch] = TH1D(Form("h_tdcBin_lead1_%d", ch), "", nBins + 1, -0.5, nBins + 0.5);
     }
 
     hipo::reader reader;
@@ -156,6 +158,7 @@ int main(int argc, char** argv) {
                     continue;
                 }
 
+                mh_tdcBin_lead1[component].Fill(tdcBin);
                 m_v_leadHits[component].push_back(curHit);
 
             }

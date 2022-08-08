@@ -114,6 +114,8 @@ int main(int argc, char** argv) {
     TH2D *h_TimeDiff_vs_t1_1 = new TH2D("h_TimeDiff_vs_t1_1", "", 5000, 0., 1100000, 800, 386000, 392000);
     //TH2D *h_TimeDiff_vs_t1_1 = new TH2D("h_TimeDiff_vs_t1_1", "", 5000, 0., 1100000, 800, -2000, 2000);
 
+    TH2D *h_TimeDiff_Paddle_1 = new TH2D("h_TimeDiff_Paddle_1", "", 200, -25000., 25000., 51, -20., 30);
+
     hipo::reader reader;
     reader.open(inpHipoFile);
 
@@ -149,6 +151,7 @@ int main(int argc, char** argv) {
 
             std::map<SLCO, vector<tdcHit> > m_v_leadHits;
             std::map<SLCO, vector< vector<tdcHit*> > > m_v_OrganizedLeadHits;
+            std::map<SLCO, vector< double > > m_v_CalibratedTimes;
 
 
             for (int i = 0; i < nVFTDC; i++) {
@@ -183,6 +186,17 @@ int main(int argc, char** argv) {
                     continue;
                 }
                 vfTDCFuncs::GetOrganizedHits(m_v_leadHits[ch], m_v_OrganizedLeadHits[ch]);
+
+                for (vector<tdcHit*> v_cur_orgHits : m_v_OrganizedLeadHits[ch]) {
+                    m_v_CalibratedTimes[ch].push_back(vfTDCFuncs::GetCalibratedTime(mv_LUT[ch], mv_LUTErr[ch], v_cur_orgHits));
+
+                    SLCO other_ch = SLCO(ch.sector, ch.layer, ch.component, 5 - ch.order);
+
+                    if (m_v_CalibratedTimes.find(other_ch) != m_v_CalibratedTimes.end()) {
+                        int paddle = ch.component * (2 * ch.layer - 3);
+                        h_TimeDiff_Paddle_1->Fill(m_v_CalibratedTimes[ch].at(0) - m_v_CalibratedTimes[other_ch].at(0), paddle);
+                    }
+                }
             }
 
             //cout << "Kuku ch_1 size is "<< m_v_OrganizedLeadHits[ch_1].size()<<"    ch_2 size is "<<m_v_OrganizedLeadHits[ch_2].size()<< endl;

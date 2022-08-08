@@ -8,16 +8,43 @@
 #ifndef MEASUREMENT_H
 #define MEASUREMENT_H
 
+#include <TH1D.h>
+#include <vector>
 
 struct tdcHit {
     int rawTDC;
     int interval;
     int tdcBin;
+    long int timestamp;
 };
 
-namespace vfTDCFuncs{
-    bool CompareInterval( tdcHit*, tdcHit* );
+namespace vfTDCFuncs {
+    bool CompareInterval(tdcHit*, tdcHit*);
+    void GetOrganizedHits(std::vector<tdcHit>&, std::vector< std::vector<tdcHit*> >&);
+    double GetCalibratedTime( std::vector<double> &v_LUT, std::vector<double> &v_LUTErr, std::vector<tdcHit*> &v_hits );
+    std::vector <double> GetLUT(TH1D*, int, int);
+    std::vector <double> GetLUTErr(TH1D*, int, int);
+    const int cycle4ns=4000;
 }
+
+/**
+ * OBject Sector Layer Component Order 
+ */
+
+class SLCO {
+public:
+    SLCO(int, int, int, int);
+
+    bool operator<(const SLCO&) const;
+    bool operator==(const SLCO&) const;
+
+    int sector;
+    int layer;
+    int component;
+    int order;
+private:
+
+};
 
 class Measurement {
 public:
@@ -36,15 +63,15 @@ protected:
 
 class DoubleMeasure : public Measurement {
 public:
-    DoubleMeasure(std::vector<tdcHit*> & );
-    
+    DoubleMeasure(std::vector<tdcHit*> &);
+
     int Get1stInterval();
     int Get1stTDCBin();
     int Get1stRawTDC();
     int Get2ndInterval();
     int Get2ndTDCBin();
     int Get2ndRawTDC();
-    
+
 
 
 private:
@@ -59,11 +86,10 @@ private:
     void AnalyzeMeasurement();
 };
 
-
-class TripleMeasure : public Measurement{
+class TripleMeasure : public Measurement {
 public:
-    TripleMeasure( std::vector<tdcHit*> & );
-    
+    TripleMeasure(std::vector<tdcHit*> &);
+
     int Get1stInterval();
     int Get1stTDCBin();
     int Get1stRawTDC();
@@ -73,7 +99,7 @@ public:
     int Get3rdInterval();
     int Get3rdTDCBin();
     int Get3rdRawTDC();
-    
+
 private:
     int f1stInterval;
     int f1stTDCBin;
@@ -84,7 +110,7 @@ private:
     int f3rdInterval;
     int f3rdTDCBin;
     int f3rdRawTDC;
-    
+
     void AnalyzeMeasurement();
 };
 

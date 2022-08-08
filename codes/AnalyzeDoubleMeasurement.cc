@@ -107,7 +107,7 @@ int main(int argc, char** argv) {
 
     hipo::bank bVFTDC(factory.getSchema("FTOF::vftdc"));
 
-    const int nTestCounts = 250000;
+    const int nTestCounts = 1000;
 
     try {
 
@@ -126,7 +126,6 @@ int main(int argc, char** argv) {
             }
 
             event.getStructure(bVFTDC);
-
             int nVFTDC = bVFTDC.getRows();
 
             vector<tdcHit> v_leadingedgeHits;
